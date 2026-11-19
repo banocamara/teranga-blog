@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router/dom";
 import { router } from "./router.jsx";
+//import { App } from "./App.jsx";
 import "./index.css";
 
 // Ce fichier est fourni : il branche le routeur sur la page.

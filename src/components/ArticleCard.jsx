@@ -4,9 +4,9 @@
 export default function ArticleCard({ article, estFavori, onBasculerFavori }) {  return (
     
     <div className="article-card">
-      <h2>{article.id} : {article.title}</h2>
+      <h2>{article.id} : {article.titre ?? article.titre}</h2>
       <p>{article.body}</p>
-      <button onClick={() => onBasculerFavori(article.id)}>
+      <button type="button" onClick={() => onBasculerFavori(article.id)}>
         {estFavori ? "Retirer des favoris" : "Ajouter aux favoris"}   
       </button>
     </div>

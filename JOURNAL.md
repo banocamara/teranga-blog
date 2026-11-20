@@ -53,3 +53,47 @@ J'ai utilisé ChatGPT pour vérifier mon implémentation des favoris et comprend
 
 ### 4. Bilan personnel
 Cette étape m'a permis de mieux comprendre `useState`, les props et la remontée de l'état. J'ai également appris à modifier un tableau sans changer directement le tableau initial.
+
+## Étape 3 — Listes, recherche et commentaires
+**Date : 20 novembre 2026**
+
+### Utilisation de l'intelligence artificielle
+
+J'ai utilisé ChatGPT pour comprendre les erreurs dans mes composants React et améliorer leur fonctionnement.
+
+Mes questions portaient principalement sur :
+- L'utilisation de `map()` pour afficher une liste d'articles.
+- La transmission des propriétés (props) entre les composants.
+- La gestion des favoris avec `useState`.
+- Le fonctionnement de `filter()`, `includes()` et `toLowerCase()` pour la recherche.
+- La création d'un formulaire contrôlé avec validation.
+- L'affichage dynamique des commentaires.
+
+### Ce que j'ai retenu
+
+J'ai compris que :
+- `map()` permet de parcourir un tableau et d'afficher ses éléments.
+- `key` permet à React d'identifier chaque élément d'une liste.
+- `filter()` permet de créer un nouveau tableau contenant uniquement les éléments qui respectent une condition.
+- `useState` permet de conserver les données et de mettre à jour l'affichage.
+- `onChange` permet de récupérer les modifications d'un champ.
+- `preventDefault()` empêche le rechargement automatique de la page lors de la soumission d'un formulaire.
+- `trim()` permet de supprimer les espaces inutiles avant de valider un commentaire.
+
+### Ce que j'ai réalisé moi-même
+
+J'ai modifié les composants suivants :
+- `ListeArticles.jsx`
+- `BarreRecherche.jsx`
+- `CommentaireForm.jsx`
+- `ListeCommentaires.jsx`
+- `Accueil.jsx`
+- `ArticleCard.jsx`
+
+J'ai également organisé les états dans la page Accueil pour gérer les favoris, la recherche et les commentaires.
+
+### Bilan
+
+Cette étape m'a permis de mieux comprendre la communication entre plusieurs composants React, l'affichage dynamique des listes et la gestion des formulaires.
+
+J'ai rencontré quelques erreurs de propriétés et de variables, que j'ai appris à identifier et à corriger.

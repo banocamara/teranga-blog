@@ -14,7 +14,7 @@ export default function ListeArticles({articles = [], favoris = [], onBasculerFa
     <div className="liste-articles">
       <p className="discret">ListeArticles : à construire (TODO P301).</p>;
       {articles.map((article) => {
-        const estFavori = favoris.includes(articles.id);
+        const estFavori = favoris.includes(article.id);
         return (
           <ArticleCard
           key={articles.id}

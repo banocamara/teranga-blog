@@ -97,3 +97,40 @@ J'ai également organisé les états dans la page Accueil pour gérer les favori
 Cette étape m'a permis de mieux comprendre la communication entre plusieurs composants React, l'affichage dynamique des listes et la gestion des formulaires.
 
 J'ai rencontré quelques erreurs de propriétés et de variables, que j'ai appris à identifier et à corriger.
+
+## Étape 4 – Effets et données distantes
+
+**Date : 23 novembre 2026**
+
+### Utilisation de l'intelligence artificielle
+
+J'ai utilisé ChatGPT pour comprendre le fonctionnement de `useEffect`, `fetch` et la récupération des données depuis une API. Je lui ai également demandé d'examiner mes fichiers afin de vérifier ma compréhension et de m'indiquer les points à contrôler.
+
+### Ce que j'ai appris
+
+- **useEffect :** permet d'exécuter des effets secondaires, notamment les requêtes vers une API.
+- **fetch() :** permet d'envoyer une requête HTTP pour récupérer des données.
+- **response.json() :** permet de convertir la réponse en données JavaScript.
+- **response.ok :** permet de vérifier si la requête HTTP a réussi.
+- **Promise.all() :** permet d'attendre plusieurs requêtes simultanément.
+- **AbortController :** permet d'annuler une requête en cours.
+- **useState :** permet de conserver les données récupérées, l'état de chargement et les éventuelles erreurs.
+- **filter() :** permet de rechercher des articles à partir de leur titre.
+- **Gestion des erreurs :** permet d'afficher un message lorsque la récupération des données échoue.
+
+### Travail réalisé personnellement
+
+J'ai travaillé sur les fichiers suivants :
+
+- `EtatRequete.jsx` : gestion des états de chargement et des erreurs.
+- `Article.jsx` : récupération d'un article et de ses commentaires.
+- `Articles.jsx` : récupération et recherche des articles.
+- `Auteur.jsx` : récupération des informations d'un auteur et de ses articles.
+- `Auteurs.jsx` : récupération et affichage de la liste des auteurs.
+- `App.jsx` : organisation des composants et gestion des favoris et des identifiants.
+
+### Bilan personnel
+
+Cette étape m'a permis de comprendre comment une application React communique avec une API externe pour récupérer des données. J'ai également appris à gérer les chargements, les erreurs et les requêtes asynchrones.
+
+J'ai compris l'importance de `useEffect` pour éviter de lancer les requêtes à chaque rendu du composant.

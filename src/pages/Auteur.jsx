@@ -1,37 +1,44 @@
 // TODO(P405) : Étape 4 puis 5.
 // Fiche d'un auteur (paramètre d'URL id) et ses articles.
-import { useEffect, useState } from 'react';
-import EtatRequete from '../components/EtatRequete';
-import ListeArticles from '../components/ListeArticles';
+import { useEffect, useState } from "react";
+import { useParams, useOutletContext } from "react-router-dom";
 
-export default function Auteur({
-  auteurId,
-  favoris = [],
-  onBasculerFavori,
-}) {
+import EtatRequete from "../components/EtatRequete";
+import ListeArticles from "../components/ListeArticles";
+
+export default function Auteur() {
+  const { id } = useParams();
+
+  const { favoris, onBasculerFavori } = useOutletContext();
+
   const [auteur, setAuteur] = useState(null);
   const [articles, setArticles] = useState(null);
   const [erreur, setErreur] = useState(null);
 
   useEffect(() => {
     const controleur = new AbortController();
+
     setAuteur(null);
     setArticles(null);
     setErreur(null);
 
-    const urlAuteur = `https://jsonplaceholder.typicode.com/users/${auteurId}`;
-    const urlArticles = `https://jsonplaceholder.typicode.com/posts?userId=${auteurId}`;
+    const urlAuteur =
+      `https://jsonplaceholder.typicode.com/users/${id}`;
+
+    const urlArticles =
+      `https://jsonplaceholder.typicode.com/posts?userId=${id}`;
 
     Promise.all([
       fetch(urlAuteur, { signal: controleur.signal }).then((reponse) => {
         if (!reponse.ok) {
-          throw new Error(`Auteur introuvable (Erreur ${reponse.status})`);
+          throw new Error(`Auteur introuvable (${reponse.status})`);
         }
         return reponse.json();
       }),
+
       fetch(urlArticles, { signal: controleur.signal }).then((reponse) => {
         if (!reponse.ok) {
-          throw new Error(`Articles de l’auteur indisponibles (Erreur ${reponse.status})`);
+          throw new Error(`Articles indisponibles (${reponse.status})`);
         }
         return reponse.json();
       }),
@@ -41,20 +48,18 @@ export default function Auteur({
         setArticles(donneesArticles);
       })
       .catch((err) => {
-        if (err.name !== 'AbortError') {
-          setErreur(err.message || 'Erreur lors du chargement de la fiche auteur');
+        if (err.name !== "AbortError") {
+          setErreur(err.message);
         }
       });
 
     return () => controleur.abort();
-  }, [auteurId]);
-
-  const chargement = (auteur === null || articles === null) && erreur === null;
+  }, [id]);
 
   return (
     <section className="page-auteur">
       <EtatRequete
-        chargement={chargement}
+        chargement={(auteur === null || articles === null) && erreur === null}
         erreur={erreur}
         messageChargement="Chargement de la fiche auteur..."
       >
@@ -62,12 +67,15 @@ export default function Auteur({
           <>
             <header className="fiche-auteur">
               <h1>{auteur.name}</h1>
-              {auteur.email && <p>Email : {auteur.email}</p>}
-              {auteur.phone && <p>Téléphone : {auteur.phone}</p>}
-              {auteur.website && <p>Site web : {auteur.website}</p>}
+              <p>Email : {auteur.email}</p>
+              <p>Téléphone : {auteur.phone}</p>
+              <p>Site web : {auteur.website}</p>
             </header>
 
-            <h2>Articles publiés ({(articles ?? []).length})</h2>
+            <h2>
+              Articles publiés ({(articles ?? []).length})
+            </h2>
+
             <ListeArticles
               articles={articles ?? []}
               favoris={favoris}

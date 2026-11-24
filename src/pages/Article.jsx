@@ -1,34 +1,43 @@
 // TODO(P403) : Étape 4 puis 5.
 // Détail d'un article (paramètre d'URL id) et ses commentaires.
-import { useEffect, useState } from 'react';
-import CommentaireForm from '../components/CommentaireForm';
-import EtatRequete from '../components/EtatRequete';
-import ListeCommentaires from '../components/ListeCommentaires';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-export default function Article({ articleId }) {
+import CommentaireForm from "../components/CommentaireForm";
+import EtatRequete from "../components/EtatRequete";
+import ListeCommentaires from "../components/ListeCommentaires";
+
+export default function Article() {
+  const { id } = useParams();
+
   const [article, setArticle] = useState(null);
   const [commentaires, setCommentaires] = useState(null);
   const [erreur, setErreur] = useState(null);
 
   useEffect(() => {
     const controleur = new AbortController();
+
     setArticle(null);
     setCommentaires(null);
     setErreur(null);
 
-    const urlArticle = `https://jsonplaceholder.typicode.com/posts/${articleId}`;
-    const urlCommentaires = `https://jsonplaceholder.typicode.com/posts/${articleId}/comments`;
+    const urlArticle =
+      `https://jsonplaceholder.typicode.com/posts/${id}`;
+
+    const urlCommentaires =
+      `https://jsonplaceholder.typicode.com/posts/${id}/comments`;
 
     Promise.all([
       fetch(urlArticle, { signal: controleur.signal }).then((reponse) => {
         if (!reponse.ok) {
-          throw new Error(`Article introuvable (Erreur ${reponse.status})`);
+          throw new Error(`Article introuvable (${reponse.status})`);
         }
         return reponse.json();
       }),
+
       fetch(urlCommentaires, { signal: controleur.signal }).then((reponse) => {
         if (!reponse.ok) {
-          throw new Error(`Commentaires indisponibles (Erreur ${reponse.status})`);
+          throw new Error(`Commentaires indisponibles (${reponse.status})`);
         }
         return reponse.json();
       }),
@@ -38,38 +47,48 @@ export default function Article({ articleId }) {
         setCommentaires(donneesCommentaires);
       })
       .catch((err) => {
-        if (err.name !== 'AbortError') {
-          setErreur(err.message || 'Erreur lors du chargement de l’article');
+        if (err.name !== "AbortError") {
+          setErreur(err.message);
         }
       });
 
     return () => controleur.abort();
-  }, [articleId]);
+  }, [id]);
 
   function ajouterCommentaire(nouveauCommentaire) {
-    setCommentaires((precedents) => [...(precedents ?? []), nouveauCommentaire]);
+    setCommentaires((precedents) => [
+      ...(precedents ?? []),
+      nouveauCommentaire,
+    ]);
   }
 
-  const chargement = (article === null || commentaires === null) && erreur === null;
+  const chargement =
+    (article === null || commentaires === null) && erreur === null;
 
   return (
     <section className="page-article">
       <EtatRequete
         chargement={chargement}
         erreur={erreur}
-        messageChargement="Chargement de l’article et des commentaires..."
+        messageChargement="Chargement de l'article et des commentaires..."
       >
         {article && (
           <>
             <article className="article-detail">
-              <h1>{article.title ?? article.titre}</h1>
-              <p>{article.body ?? article.contenu}</p>
+              <h1>{article.title}</h1>
+              <p>{article.body}</p>
             </article>
 
-            <section className="section-commentaires" aria-label="Commentaires">
-              <h2>Commentaires ({(commentaires ?? []).length})</h2>
+            <section className="section-commentaires">
+              <h2>
+                Commentaires ({(commentaires ?? []).length})
+              </h2>
+
               <ListeCommentaires commentaires={commentaires ?? []} />
-              <CommentaireForm onAjouterCommentaire={ajouterCommentaire} />
+
+              <CommentaireForm
+                onAjouterCommentaire={ajouterCommentaire}
+              />
             </section>
           </>
         )}

@@ -1,34 +1,946 @@
-/* Feuille de style de départ : le projet évalue React, pas le CSS.
-   Tu peux l'utiliser telle quelle, la modifier, ou demander à une IA de réécrire tout le CSS
-   et de placer les classes (className) dans ton JSX : c'est la seule aide complète autorisée. */
+/* =========================================
+   1. IMPORTATION DE LA POLICE
+========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+
+/* =========================================
+   2. VARIABLES GLOBALES
+========================================= */
+
 :root {
-  --fond: #f7f8fa;
-  --texte: #1f1f1f;
-  --discret: #666666;
-  --accent: #0b6e4f;
-  --bord: #dddddd;
-  --erreur: #b3261e;
+  font-family: 'DM Sans', sans-serif;
+
+  color: #1e293b;
+  background: #f6f7fc;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  --primaire: #635bdb;
+  --primaire-fonce: #4f46c8;
+  --secondaire: #0f172a;
+  --texte: #334155;
+  --texte-clair: #64748b;
+  --fond: #f6f7fc;
+  --blanc: #ffffff;
+  --bordure: #e8eaf2;
+  --vert: #10b981;
+  --rouge: #ef4444;
+
+  --ombre: 0 10px 35px rgba(31, 41, 55, 0.06);
+  --ombre-hover: 0 20px 45px rgba(99, 91, 219, 0.15);
+
+  --rayon: 18px;
 }
-* { box-sizing: border-box; }
-body {
+
+
+/* =========================================
+   3. RESET ET BASE
+========================================= */
+
+* {
   margin: 0;
-  font-family: system-ui, Arial, sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
   background: var(--fond);
   color: var(--texte);
   line-height: 1.6;
 }
-.conteneur { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem; }
-.barre-nav { background: #fff; border-bottom: 1px solid var(--bord); }
-.barre-nav .conteneur { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
-.barre-nav a { color: var(--texte); text-decoration: none; padding: .25rem 0; }
-.barre-nav a.active { color: var(--accent); border-bottom: 2px solid var(--accent); font-weight: 600; }
-.grille { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-.carte { background: #fff; border: 1px solid var(--bord); border-radius: 8px; padding: 1rem; }
-.carte h3 { margin-top: 0; text-transform: capitalize; }
-.bouton { background: var(--accent); color: #fff; border: 0; border-radius: 6px; padding: .5rem .9rem; cursor: pointer; }
-.bouton.secondaire { background: #fff; color: var(--accent); border: 1px solid var(--accent); }
-.champ { display: block; width: 100%; padding: .5rem; margin: .25rem 0 .75rem; border: 1px solid var(--bord); border-radius: 6px; font: inherit; }
-.etat-chargement { color: var(--discret); font-style: italic; }
-.etat-erreur { color: var(--erreur); border: 1px solid var(--erreur); border-radius: 6px; padding: .75rem; }
-.message-erreur { color: var(--erreur); font-size: .9rem; margin: -.5rem 0 .75rem; }
-.discret { color: var(--discret); font-size: .9rem; }
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+/* =========================================
+   4. BARRE DE NAVIGATION
+========================================= */
+
+header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--bordure);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav {
+  max-width: 1200px;
+  margin: auto;
+  padding: 18px 25px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+}
+
+nav a {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--texte-clair);
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: var(--primaire);
+}
+
+nav a.active {
+  color: var(--primaire);
+}
+
+
+/* =========================================
+   5. CONTENEUR PRINCIPAL
+========================================= */
+
+main {
+  max-width: 1200px;
+  margin: 45px auto;
+  padding: 0 25px;
+  min-height: 65vh;
+}
+
+section {
+  animation: apparition 0.6s ease;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Outfit', sans-serif;
+  color: var(--secondaire);
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: clamp(30px, 5vw, 46px);
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-size: 21px;
+  margin-bottom: 12px;
+}
+
+p {
+  color: var(--texte-clair);
+}
+
+
+/* =========================================
+   6. PAGE D'ACCUEIL
+========================================= */
+
+.page-accueil {
+  text-align: center;
+  padding: 80px 25px;
+
+  background:
+    radial-gradient(circle at 10% 20%, #e9e7ff 0, transparent 35%),
+    radial-gradient(circle at 90% 80%, #e0f2fe 0, transparent 35%),
+    white;
+
+  border-radius: 30px;
+  box-shadow: var(--ombre);
+}
+
+.page-accueil h1 {
+  max-width: 800px;
+  margin: 0 auto 20px;
+}
+
+.page-accueil h1 span {
+  background: linear-gradient(90deg, #635bdb, #a855f7);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.page-accueil p {
+  max-width: 650px;
+  margin: auto;
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+
+/* =========================================
+   7. BOUTONS
+========================================= */
+
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 11px 19px;
+
+  background: var(--primaire);
+  color: white;
+
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: var(--primaire-fonce);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(99, 91, 219, 0.25);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+
+/* =========================================
+   8. CARTES D'ARTICLES
+========================================= */
+
+.liste-articles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.article-card {
+  background: var(--blanc);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+
+  padding: 25px;
+
+  box-shadow: var(--ombre);
+  transition: all 0.35s ease;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.article-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--ombre-hover);
+  border-color: #c7c3ff;
+}
+
+.article-card h3 {
+  font-size: 20px;
+  transition: color 0.3s;
+}
+
+.article-card:hover h3 {
+  color: var(--primaire);
+}
+
+.article-card p {
+  line-height: 1.8;
+  font-size: 14px;
+}
+
+.article-card button {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+
+/* =========================================
+   9. BARRE DE RECHERCHE
+========================================= */
+
+.barre-recherche {
+  background: white;
+  padding: 22px;
+  border-radius: var(--rayon);
+  box-shadow: var(--ombre);
+  margin: 25px 0;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.barre-recherche label {
+  font-weight: 600;
+  color: var(--secondaire);
+}
+
+.barre-recherche input {
+  flex: 1;
+  min-width: 200px;
+}
+
+
+/* =========================================
+   10. CHAMPS DE FORMULAIRE
+========================================= */
+
+input,
+textarea {
+  width: 100%;
+  padding: 13px 16px;
+
+  background: #f8f9fd;
+  border: 1px solid var(--bordure);
+  border-radius: 12px;
+
+  color: var(--secondaire);
+  outline: none;
+
+  transition: all 0.3s;
+}
+
+input:focus,
+textarea:focus {
+  background: white;
+  border-color: var(--primaire);
+  box-shadow: 0 0 0 4px rgba(99, 91, 219, 0.1);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #a0a8b8;
+}
+
+
+/* =========================================
+   11. FORMULAIRE COMMENTAIRES
+========================================= */
+
+.commentaire-form {
+  background: white;
+  padding: 28px;
+  margin-top: 30px;
+
+  border-radius: var(--rayon);
+  border: 1px solid var(--bordure);
+  box-shadow: var(--ombre);
+}
+
+.commentaire-form h4 {
+  margin-bottom: 20px;
+  font-size: 21px;
+}
+
+.commentaire-form div {
+  margin-bottom: 18px;
+}
+
+.commentaire-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--secondaire);
+}
+
+.commentaire-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.commentaire-form button {
+  margin-top: 5px;
+}
+
+
+/* =========================================
+   12. LISTE DES COMMENTAIRES
+========================================= */
+
+.liste-commentaires {
+  list-style: none;
+  margin-top: 25px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.commentaire-item {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+
+  border-left: 4px solid var(--primaire);
+  box-shadow: var(--ombre);
+}
+
+.commentaire-item strong {
+  display: block;
+  color: var(--secondaire);
+  margin-bottom: 7px;
+}
+
+.commentaire-item p {
+  font-size: 14px;
+}
+
+
+/* =========================================
+   13. AUTEURS
+========================================= */
+
+.liste-auteurs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 22px;
+}
+
+.carte-auteur {
+  background: white;
+  padding: 25px;
+  border-radius: var(--rayon);
+  box-shadow: var(--ombre);
+  text-align: center;
+  transition: 0.3s;
+}
+
+.carte-auteur:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--ombre-hover);
+}
+
+.carte-auteur h3 {
+  color: var(--primaire);
+}
+
+
+/* =========================================
+   14. ÉTATS DE REQUÊTE
+========================================= */
+
+.etat-chargement {
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  margin: 20px 0;
+  font-weight: 600;
+}
+
+.etat-erreur,
+.message-erreur {
+  background: #fef2f2;
+  color: var(--rouge);
+  padding: 15px;
+  border-radius: 12px;
+  margin: 15px 0;
+}
+
+
+/* =========================================
+   15. PAGE FAVORIS
+========================================= */
+
+.page-favoris {
+  padding: 30px;
+  background: white;
+  border-radius: var(--rayon);
+  box-shadow: var(--ombre);
+}
+
+
+/* =========================================
+   16. PAGE 404
+========================================= */
+
+.page-introuvable {
+  text-align: center;
+  padding: 90px 20px;
+}
+
+.page-introuvable h1 {
+  font-size: 100px;
+  background: linear-gradient(90deg, #635bdb, #a855f7);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.page-introuvable p {
+  margin-bottom: 25px;
+}
+
+
+/* =========================================
+   17. PIED DE PAGE
+========================================= */
+
+footer {
+  background: #0f172a;
+  color: white;
+
+  padding: 35px 20px;
+  text-align: center;
+  margin-top: 80px;
+}
+
+footer p {
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+
+/* =========================================
+   18. ANIMATIONS
+========================================= */
+
+@keyframes apparition {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================
+   19. RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 768px) {
+
+  nav {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  main {
+    margin: 25px auto;
+    padding: 0 15px;
+  }
+
+  .page-accueil {
+    padding: 50px 20px;
+  }
+
+  .barre-recherche {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .liste-articles {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  footer {
+    margin-top: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  nav {
+    padding: 15px;
+  }
+
+  .article-card,
+  .commentaire-form {
+    padding: 18px;
+  }
+
+  .page-introuvable h1 {
+    font-size: 70px;
+  }
+}
+
+/* Logo Teranga Blog */
+header img {
+  width: 220px;
+  max-height: 50px;
+  object-fit: contain;
+  display: block;
+}
+
+/* En-tête */
+header {
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+}
+
+nav {
+  max-width: 1200px;
+  margin: auto;
+  min-height: 90px;
+  padding: 10px 25px;
+}
+
+/* =================================
+   NOUVEL EN-TÊTE TERANGA BLOG
+================================= */
+
+.entete {
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom: 1px solid #e8eaf2;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.04);
+}
+
+.entete-interieur {
+  max-width: 1200px;
+  min-height: 95px;
+  margin: auto;
+  padding: 10px 25px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Logo */
+
+.logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo img {
+  width: 220px;
+  height: 70px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Navigation */
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+
+.navigation a {
+  color: #64748b;
+  font-size: 15px;
+  font-weight: 700;
+  transition: 0.3s;
+  position: relative;
+}
+
+.navigation a:hover,
+.navigation a.active {
+  color: #ea7200;
+}
+
+.navigation a.active::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background: #ea7200;
+  bottom: -12px;
+  left: 0;
+  border-radius: 5px;
+}
+
+/* Présentation des articles */
+
+.titre-section {
+  margin-bottom: 30px;
+}
+
+.surtitre {
+  color: #ea7200;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 3px;
+}
+
+.titre-section h1 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.titre-section p {
+  max-width: 650px;
+  line-height: 1.8;
+}
+
+/* Cartes */
+
+.article-card {
+  overflow: hidden;
+  padding: 0;
+}
+
+.article-card img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+}
+
+.article-card h3,
+.article-card p {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.article-card button {
+  margin: 10px 20px 20px;
+}
+
+.aucun-resultat {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 15px;
+}
+
+/* Pied de page */
+
+.pied-page h3 {
+  color: white;
+  margin-bottom: 12px;
+}
+
+.copyright {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #334155;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .entete-interieur {
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .logo img {
+    width: 180px;
+    height: 60px;
+  }
+
+  .navigation {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+
+/* =====================================
+   CARTES MODERNES TERANGA BLOG
+===================================== */
+
+.liste-articles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 35px;
+}
+
+.article-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #e9eaf0;
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.article-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* Image */
+
+.article-image {
+  position: relative;
+  height: 210px;
+  overflow: hidden;
+  background: #e9eaf0;
+}
+
+.article-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.article-card:hover .article-image img {
+  transform: scale(1.07);
+}
+
+/* Catégorie */
+
+.article-categorie {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #ea7200;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Contenu */
+
+.article-contenu {
+  padding: 22px;
+}
+
+.article-date {
+  color: #ea7200;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.article-contenu h2 {
+  font-size: 19px;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.article-contenu h2 a {
+  color: #14243b;
+  transition: color 0.3s;
+}
+
+.article-contenu h2 a:hover {
+  color: #ea7200;
+}
+
+.article-description {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+/* Auteur */
+
+.article-auteur {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid #edf0f5;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.article-auteur img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Boutons */
+
+.article-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 17px;
+}
+
+.bouton-lire {
+  background: #14243b;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+.bouton-lire:hover {
+  background: #ea7200;
+  transform: translateY(-2px);
+}
+
+.bouton-favori {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  background: #fff2e8;
+  color: #ea7200;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bouton-favori:hover,
+.bouton-favori.favori-actif {
+  background: #ea7200;
+  color: white;
+}
+
+/* Responsive */
+
+@media (max-width: 950px) {
+  .liste-articles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .liste-articles {
+    grid-template-columns: 1fr;
+  }
+}

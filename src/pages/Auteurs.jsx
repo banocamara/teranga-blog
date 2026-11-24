@@ -1,16 +1,20 @@
 // TODO(P404) : Étape 4 puis 5.
 // Liste des auteurs chargés depuis l'API.
-import { useEffect, useState } from 'react';
-import EtatRequete from '../components/EtatRequete';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const URL_AUTEURS = 'https://jsonplaceholder.typicode.com/users';
+import EtatRequete from "../components/EtatRequete";
 
-export default function Auteurs({ onSelectionnerAuteur }) {
+const URL_AUTEURS =
+  "https://jsonplaceholder.typicode.com/users";
+
+export default function Auteurs() {
   const [auteurs, setAuteurs] = useState(null);
   const [erreur, setErreur] = useState(null);
 
   useEffect(() => {
     const controleur = new AbortController();
+
     setAuteurs(null);
     setErreur(null);
 
@@ -19,45 +23,36 @@ export default function Auteurs({ onSelectionnerAuteur }) {
         if (!reponse.ok) {
           throw new Error(`Erreur HTTP ${reponse.status}`);
         }
+
         return reponse.json();
       })
-      .then((donnees) => {
-        setAuteurs(donnees);
-      })
+      .then((donnees) => setAuteurs(donnees))
       .catch((err) => {
-        if (err.name !== 'AbortError') {
-          setErreur(err.message || 'Impossible de charger les auteurs');
+        if (err.name !== "AbortError") {
+          setErreur(err.message);
         }
       });
 
     return () => controleur.abort();
   }, []);
 
-  const chargement = auteurs === null && erreur === null;
-
   return (
     <section className="page-auteurs">
       <h1>Auteurs</h1>
 
       <EtatRequete
-        chargement={chargement}
+        chargement={auteurs === null && erreur === null}
         erreur={erreur}
         messageChargement="Chargement des auteurs..."
       >
         <ul className="liste-auteurs">
           {(auteurs ?? []).map((auteur) => (
-            <li key={auteur.id} className="auteur-item">
-              {onSelectionnerAuteur ? (
-                <button
-                  type="button"
-                  onClick={() => onSelectionnerAuteur(auteur.id)}
-                >
-                  {auteur.name}
-                </button>
-              ) : (
+            <li key={auteur.id}>
+              <Link to={`/auteurs/${auteur.id}`}>
                 <strong>{auteur.name}</strong>
-              )}
-              {auteur.email && <span> — {auteur.email}</span>}
+              </Link>
+
+              <p>{auteur.email}</p>
             </li>
           ))}
         </ul>
